@@ -13,12 +13,11 @@ sh -c "echo Setting Credentials ..."
 sh -c "git config --global credential.username $GITLAB_USERNAME"
 sh -c "git config --global core.askPass /cred-helper.sh"
 sh -c "git config --global credential.helper cache"
+sh -c "git config --global user.email $GITLAB_EMAIL"
+sh -c "git config --global user.name $GITLAB_USERNAME"
 sh -c "git remote add mirror $*"
 sh -c "git remote -v"
 sh -c "echo Pulling any changes form $branch branch at $(git remote get-url --push mirror)"
-sh -c "git config --global user.email $GITLAB_EMAIL"
-sh -c "git config --global user.name $GITLAB_USERNAME"
-# sh -c "git pull mirror $branch --rebase"
 sh -c "echo pushing to $branch branch at $(git remote get-url --push mirror)"
 sh -c "git push mirror $branch"
 
@@ -27,7 +26,6 @@ sleep $POLL_TIMEOUT
 # convert slashes in a HTML-compatible way
 branch=${branch//\//%2F}
 
-sh -c "echo https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${branch}"
 pipeline_id=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${branch}" | jq '.last_pipeline.id')
 
 echo "Triggered CI for branch ${branch}"
