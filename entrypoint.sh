@@ -9,11 +9,12 @@ git checkout "${GITHUB_REF:11}"
 
 branch=$(git symbolic-ref --short HEAD)
 
+sh -c "echo Setting Credentials ..."
 sh -c "git config --global credential.username $GITLAB_USERNAME"
 sh -c "git config --global core.askPass /cred-helper.sh"
 sh -c "git config --global credential.helper cache"
 sh -c "git remote add mirror $*"
-sh -c "echo $(git remote)"
+sh -c "echo Here are the remotes: $(git remote -v)"
 sh -c "echo pulling any changes form $branch branch at $(git remote get-url --push mirror)"
 sh -c "git pull mirror $branch --rebase"
 sh -c "echo pushing to $branch branch at $(git remote get-url --push mirror)"
