@@ -7,7 +7,7 @@ POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
 
 git checkout "${GITHUB_REF:11}"
 
-branch=${GITHUB_REPOSITORY}$(git symbolic-ref --short HEAD)
+branch=$(git symbolic-ref --short HEAD)
 
 sh -c "echo Setting Credentials ..."
 sh -c "git config --global credential.username $GITLAB_USERNAME"
